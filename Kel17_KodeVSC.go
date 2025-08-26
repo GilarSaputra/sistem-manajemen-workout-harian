@@ -382,30 +382,31 @@ func insertionSortKalori(data []Workout, ascending bool) { // kosenp : ubah nila
 	n := len(data) //n sebagai panjang data
 	for i := 1; i < n; i++ {
 		temp := data[i] // elemen saat ini
-		j := i - 1
+		j := i - 1 // indeks elemen sebelum i
 
 		if ascending {
 			for j >= 0 && data[j].kalori > temp.kalori {
-				data[j+1] = data[j] // geser ke kanan
+				data[j+1] = data[j] // geser elemen besar ke kanan
 				j--
 			}
 		} else {
 			for j >= 0 && data[j].kalori < temp.kalori {
-				data[j+1] = data[j] // geser ke kiri
+				data[j+1] = data[j] // geser eloemen kecil ke kanan
 				j--
 			}
 		}
 
-		data[j+1] = temp
+		data[j+1] = temp // setelah posisi tepat. tempatkan elemn temp 
 	}
 }
 
 // Fitur menu 5 -> sorting kalori dan durasi
 func sorting() {
 
+	// backup data asli
 	if len(daftarLatihanBackup) == 0 {
 		daftarLatihanBackup = make([]Workout, len(daftarLatihan))
-		copy(daftarLatihanBackup, daftarLatihan)
+		copy(daftarLatihanBackup, daftarLatihan) // salin isi data di aray awal ke daftarLatihanbackup
 	}
 	var pilihJenis int
 	var urutan int
@@ -434,7 +435,7 @@ func sorting() {
 	ascending := (urutan == 1)
 
 	salinanData := make([]Workout, len(daftarLatihan))
-	copy(salinanData, daftarLatihan)
+	copy(salinanData, daftarLatihan) //menjaga data asli agar tidak berubah secara permanen 
 
 	if pilihJenis == 1 {
 		selectionSort(salinanData, ascending)
@@ -449,6 +450,7 @@ func sorting() {
 
 // Fitur menu 6 -> rekomendasi latihan
 func rekomendasi() {
+	//mengambil tanggal terakhir untuk menentukan rekoemndasi
 	tanggalTerakhir := daftarLatihan[len(daftarLatihan)-1].tanggalWorkout.Format("02-01-2006")
 
 	var bodyAtas, bodyBawah int
@@ -493,12 +495,14 @@ func rekomendasi() {
 	var totalKalori float64
 	var rekomendasi []Workout
 
+	//menghitung sisa kalori yg belum terpenuhi
 	for _, item := range semuaLatihan {
 		if totalKalori >= 500 {
 			break
 		}
 		sisaKalori := 500 - totalKalori
 
+		// durasi rekoemndasi anatar 3-15 menit
 		durasi := int(sisaKalori / item.kaloriPerMenit)
 		if durasi < 3 {
 			durasi = 3
